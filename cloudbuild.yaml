@@ -1,0 +1,19 @@
+steps:
+  # Build docker image with docker builder
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend-image', '.']
+  # Publish image to container registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/backend-image']
+  # Execute kubectl command to update associated deployment image
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      [
+        'set',
+        'image',
+        'deployment/backend-deployment',
+        'backend=gcr.io/$PROJECT_ID/backend-image',
+      ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west2-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-test-felix'
