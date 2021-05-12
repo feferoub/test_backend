@@ -16,4 +16,4 @@ steps:
       ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west2-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-test-felix'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=training'
