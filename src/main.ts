@@ -1,5 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+require('@google-cloud/debug-agent').start({
+  serviceContext: { enableCanary: true },
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
