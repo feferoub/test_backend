@@ -1,7 +1,7 @@
 steps:
   # Build docker image with docker builder
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend-image', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend-image:latest', '.']
   # Publish image to container registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/backend-image:latest']
