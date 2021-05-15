@@ -62,18 +62,6 @@ export class AppController {
       return 'failed';
     }
   }
-
-  @Get('pull-pub-sub')
-  async pull(): Promise<string> {
-    try {
-      const messageId = await topic.publish(data);
-      console.log(`Message ${messageId} sent.`);
-      return 'success';
-    } catch (error) {
-      console.log(error);
-      return 'failed';
-    }
-  }
 }
 
 function listenForMessages() {
