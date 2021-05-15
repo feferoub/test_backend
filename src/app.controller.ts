@@ -62,4 +62,38 @@ export class AppController {
       return 'failed';
     }
   }
+
+  @Get('pull-pub-sub')
+  async pull(): Promise<string> {
+    try {
+      const messageId = await topic.publish(data);
+      console.log(`Message ${messageId} sent.`);
+      return 'success';
+    } catch (error) {
+      console.log(error);
+      return 'failed';
+    }
+  }
 }
+
+function listenForMessages() {
+  // References an existing subscription
+  const subscription = pubsub.subscription('pull-test');
+
+  // Create an event handler to handle messages
+  let messageCount = 0;
+  const messageHandler = (message) => {
+    console.log(`Received message ${message.id}:`);
+    console.log(`\tData: ${message.data}`);
+    console.log(`\tAttributes: ${message.attributes}`);
+    messageCount += 1;
+
+    // "Ack" (acknowledge receipt of) the message
+    message.ack();
+  };
+
+  // Listen for new messages until timeout is hit
+  subscription.on('message', messageHandler);
+}
+
+listenForMessages();
