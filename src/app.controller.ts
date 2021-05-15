@@ -52,8 +52,8 @@ export class AppController {
 
   @Get('push-pub-sub')
   async push(): Promise<string> {
-    const data = { message: 'Coucou', author: 'Felix' };
     try {
+      const data = Buffer.from('coucou');
       const messageId = await topic.publish(data);
       console.log(`Message ${messageId} sent.`);
       return 'success';
