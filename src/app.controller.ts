@@ -1,6 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RedisCacheService } from './redis/redisCache.service';
+const { PubSub } = require('@google-cloud/pubsub');
+const process = require('process');
+
+const pubsub = new PubSub();
+
+const { PUBSUB_VERIFICATION_TOKEN, PUBSUB_TOPIC } = process.env;
+const topic = pubsub.topic(PUBSUB_TOPIC);
 
 @Controller()
 export class AppController {
@@ -41,5 +48,18 @@ export class AppController {
     const value = await this.redisCacheService.get(key);
     this.count = this.count + 1;
     return { data: value };
+  }
+
+  @Get('push-pub-sub')
+  async push(): Promise<string> {
+    const data = { message: 'Coucou', author: 'Felix' };
+    try {
+      const messageId = await topic.publish(data);
+      console.log(`Message ${messageId} sent.`);
+      return 'success';
+    } catch (error) {
+      console.log(error);
+      return 'failed';
+    }
   }
 }
